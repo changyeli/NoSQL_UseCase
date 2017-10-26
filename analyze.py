@@ -18,9 +18,10 @@ class analyze:
 			print k, v
 		print "----------------------------------------"
 	def sentStat(self):
-		s1 = "FOR x IN email COLLECT people = x._to WITH COUNT INTO counter SORT counter DESC RETURN{people:people, number:counter}"
-		cursor = self.db.aql.execute(s1)
-		print([self.email["_key"] for email in cursor])
+		s1 = "FOR x IN email COLLECT people = x._to WITH COUNT INTO counter SORT counter DESC RETURN{people:FIRST(people), number:FIRST(counter)}"
+		d1 = self.db.aql.execute(s1)
+		
+		
 
 
 x = analyze()
