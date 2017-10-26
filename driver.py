@@ -12,16 +12,9 @@ with open("email_unique.json") as f:
 	emails = json.load(f, encoding = 'utf8')
 ## create graph
 gg = db.graph('enron_graph')
-#people = gg.create_vertex_collection('people')
-#for each in emails:
-#	people.insert(each)
-
-## create edge definition
-#gg.create_edge_definition(
- #   name='email',
-  #  from_collections=['people'],
-   # to_collections=['people']
-#)
+people = gg.create_vertex_collection('people')
+for each in emails:
+	people.insert(each)
 
 ee = gg.edge_collection('email')
 for each in edge:
