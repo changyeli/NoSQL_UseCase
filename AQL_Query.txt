@@ -1,0 +1,79 @@
+
+easy 1)
+/*Find the number of email that people received*/
+
+FOR x IN email 
+
+COLLECT people = x._to WITH COUNT INTO counter 
+
+SORT counter DESC
+RETURN {people: people, number: counter}
+
+FOR x IN email 
+
+COLLECT people = x._from WITH COUNT INTO counter 
+
+SORT counter DESC
+RETURN {people: people, number: counter}
+
+
+
+/*Find emails that relative to a specific person*/
+
+FOR x IN ANY 'people/kay.mann@enron.com' email
+
+OPTIONS {bfs: true, uniqueVertices: 'global'} 
+
+RETURN x._id
+
+
+
+*Find one degree away from a specific person*/
+
+FOR v,e,p IN 1..1 OUTBOUND 'people/kay.mann@enron.com' GRAPH 'enron_graph'
+RETURN  e
+
+
+
+/*Find two degree away from a specific person who wrote long email*/
+
+FOR v,e,p IN 1..2 OUTBOUND 'people/kay.mann@enron.com' 
+GRAPH 'enron_graph'
+FILTER e.body_len > 1000
+
+RETURN v._key
+
+
+
+/*shortest path from A to B*/
+
+FOR v, e IN OUTBOUND 
+
+SHORTEST_PATH 'people/kay.mann@enron.com' 
+TO 'people/vince.kaminski@enron.com' 
+
+email
+/*GRAPH 'Enron_graph'*/
+
+RETURN [v._key, e._key]
+
+
+
+
+/*Find Total edges between two specific people*/
+
+FOR target, edge IN ANY "people/raetta.zadow@enron.com" 
+GRAPH "enron_graph"
+FILTER target._id == "people/lynn.blair@enron.com" 
+
+RETURN edge
+
+
+easy 3)
+/*Find all email number between two people */
+
+FOR x IN email 
+COLLECT people1 = x._from, people2 = x._to WITH COUNT INTO counter 
+
+SORT counter DESC
+RETURN {sender: people1,receiver: people2, number: counter}
