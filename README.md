@@ -1,6 +1,15 @@
-# Phase 2 Report
+# CSCI 5980 NoSQL Proof of Concept Phase 2 Report
+
+## Authors
+
+- Wen Jin (jingx034@umn.edu)
+- Changye Li (lixx3013@umn.edu)
+- Sean Corum (corum002@umn.edu)
 
 ## Review of Business Questions
+
+For this project, we are working for a legal firm that wants to perform social analysis on a network of individuals using a set of corporate email accounts. To start, the firm wants to know who has communicated with who, who is a given person’s social network using email communication as a proxy, and summary statistics about the email dataset (i.e., who received and sent the most email, who received and sent the least email, etc.). To perform a proof of concept of a NoSQL stack that can answer these kinds of queries for the firm, we chose to ingest the email data into an ArangoDB graph database and perform sample queries to demonstrate the effectiveness of the technology.
+
 ## Data Processing
 The original dataset mentioned in Phase 1 turned out to be too big to run on the local machine. Also, we failed to find a low-cost way to translate ```.pst``` to common files. Therefore, we chose the alternative [Enron dataset](http://www.cs.cmu.edu/~enron/), which contains plain text of translated ```.pst``` data, to continue our analysis.
 
@@ -85,7 +94,7 @@ RETURN {people: people, number: counter}
 	- The mean of sent emails is 80.667
 	- The median of sent emails is 51
 
-### Medium Questions' Solution
+### Medium to Hard Questions' Solution
 #### What group was in communication with the CEO
 
 The AQL used in this question is listed below:
@@ -128,7 +137,6 @@ RETURN [v._key, e._key]
 
 The result of above AQL is: ```kay.mann@enron.com``` -> ```carol.clair@enron.com``` -> ```mark.haedicke@enron.com``` -> ```vince.kaminski@enron.com```
 
-### Hard Questions' Solution
 ## Conclusion
 ### What we did
 We did data identification, selection, cleaning and loading. We visualize data with ArangoDB built-in tool
@@ -138,6 +146,8 @@ ArangoDB has its own visualization tool, which is very convenient for us to show
 We learned AQL, a SQL-like language to help us query based on graph. We also learned some new data cleaning technique, including regular expression.
 ### What's the Challenge
 First, the data is super complex, such as typos, duplications, irregular employee names, missing receiver email addresses. Also, compared to SQL, AQL is somehow limited, which increases our difficulty to query. Moreover, it seems longest path traversal is not supported in ArangoDB, therefore we cannot answer some questions which we raised in Phase 1.
+### Next steps
+As we continue the email graph database project for the legal firm, we will aim to add text analytics and community analysis. For text analytics, we would include new fields to the data, including fields describing attachment metadata (file name, file type, file size), analytics summaries for text-based attachments (text length, sentiment polarity, sentiment subjectivity), and the same analytics fields for the email body and subject. The idea behind this sort of analysis would be to find out if any particular person in the corporation was disgruntled (so we would query for senders of emails with highly negative sentiment). For community analysis, we would use publicly available packages for ArangoDB that find overly dense clusters of email users in the graph, which may be useful for determining which individuals in the corporation are part of a conspiracy.
 ## Appendix
 Please check our [github repo](https://github.com/palooney/NoSQL_UseCase) for more details.
 
